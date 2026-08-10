@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block content %}
+<div class="top"><div><h1>Dashboard</h1><p>{{session.get('name')}} · {{session.get('role')}}</p></div><a class="btn" href="{{url_for('daily')}}">Enter 24-hour readings</a></div>
+<div class="cards">
+<div class="card"><span>Diesel Stock</span><b>{{"%.0f"|format(diesel_stock)}} L</b></div>
+<div class="card"><span>Petrol Stock</span><b>{{"%.0f"|format(petrol_stock)}} L</b></div>
+<div class="card"><span>Diesel Sold Today</span><b>{{"%.0f"|format(diesel_sold)}} L</b></div>
+<div class="card"><span>Petrol Sold Today</span><b>{{"%.0f"|format(petrol_sold)}} L</b></div>
+<div class="card"><span>Pending Corrections</span><b>{{pending}}</b></div>
+</div>
+<h2>Tank Stock</h2><div class="grid">
+{% for t in tanks %}<div class="tank"><b>{{t.name}}</b><span>{{t.fuel_type}}</span><strong>{{"%.0f"|format(t.current_stock)}} / {{"%.0f"|format(t.capacity)}} L</strong><div class="bar"><i style="width:{{(t.current_stock/t.capacity*100)|round|int}}%"></i></div></div>{% endfor %}
+</div>
+<h2>Today's Machine Entries</h2>
+<div class="table-wrap"><table><tr><th>Machine</th><th>Opening</th><th>Closing</th><th>Sold</th><th>Employee</th></tr>
+{% for r in readings %}<tr><td>{{r.machine.name}}</td><td>{{r.opening_meter}}</td><td>{{r.closing_meter or "-"}}</td><td>{{r.litres_sold or "-"}}</td><td>{{r.user.name}}</td></tr>{% else %}<tr><td colspan="5">No entries yet.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

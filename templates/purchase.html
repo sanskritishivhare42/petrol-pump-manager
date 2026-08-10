@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block content %}
+<h1>Fuel Purchase</h1>
+<form method="post" class="form-grid">
+<label>Date<input type="date" name="business_date" value="{{today}}" required></label>
+<label>Tank<select name="tank_id">{% for t in tanks %}<option value="{{t.id}}">{{t.name}} — {{t.fuel_type}}</option>{% endfor %}</select></label>
+<label>Quantity (L)<input type="number" name="quantity" step="0.01" min="0.01" required></label>
+<label>Supplier<input name="supplier"></label>
+<label>Invoice number<input name="invoice_number"></label>
+<label>Tanker number<input name="tanker_number"></label>
+<button class="btn">Save Purchase</button>
+</form>
+<h2>Recent Purchases</h2><div class="table-wrap"><table><tr><th>Date</th><th>Tank</th><th>Qty</th><th>Supplier</th><th>Invoice</th><th>Entered by</th></tr>
+{% for p in purchases %}<tr><td>{{p.business_date}}</td><td>{{p.tank.name}}</td><td>{{p.quantity}} L</td><td>{{p.supplier or "-"}}</td><td>{{p.invoice_number or "-"}}</td><td>{{p.user.name}}</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block content %}
+<h1>Corrections</h1>
+{% if session.get('role') != 'ADMIN' %}
+<h2>Request a correction</h2>
+<form method="post" class="form-grid">
+<label>Entry<select name="reading_id">{% for r in readings %}<option value="{{r.id}}">{{r.business_date}} · {{r.machine.name}} · Closing {{r.closing_meter}}</option>{% endfor %}</select></label>
+<label>New closing meter<input type="number" step="0.01" name="new_closing" required></label>
+<label>Reason<textarea name="reason" required></textarea></label>
+<button class="btn">Request Correction</button>
+</form>
+{% endif %}
+<h2>Correction History</h2><div class="table-wrap"><table><tr><th>Date</th><th>Machine</th><th>Old</th><th>New</th><th>Reason</th><th>Status</th><th>Action</th></tr>
+{% for c in requests %}<tr><td>{{c.created_at.strftime('%Y-%m-%d %H:%M')}}</td><td>{{c.reading.machine.name}}</td><td>{{c.old_closing}}</td><td>{{c.new_closing}}</td><td>{{c.reason}}</td><td>{{c.status}}</td>
+<td>{% if session.get('role')=='ADMIN' and c.status=='PENDING' %}<form class="inline" method="post" action="{{url_for('correction_action',req_id=c.id,action='approve')}}"><button>Approve</button></form><form class="inline" method="post" action="{{url_for('correction_action',req_id=c.id,action='reject')}}"><button>Reject</button></form>{% else %}-{% endif %}</td></tr>
+{% else %}<tr><td colspan="7">No correction requests.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

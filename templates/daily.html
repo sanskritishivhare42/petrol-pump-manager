@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block content %}
+<h1>24-Hour Closing Entry</h1>
+<p>Enter the closing meter for each machine. Sold litres are calculated automatically.</p>
+<form method="post">
+<label>Business date</label><input type="date" name="business_date" value="{{business_date}}" required>
+<div class="table-wrap"><table><tr><th>Machine</th><th>Fuel</th><th>Opening</th><th>Closing</th><th>Sold</th></tr>
+{% for m in machines %}
+{% set r=existing.get(m.id) %}
+<tr><td>{{m.name}}</td><td>{{m.fuel_type}}</td><td>{{r.opening_meter if r else m.opening_meter}}</td>
+<td>{% if r %}{{r.closing_meter}}{% else %}<input class="meter" data-opening="{{m.opening_meter}}" name="closing_{{m.id}}" type="number" step="0.01" min="{{m.opening_meter}}">{% endif %}</td>
+<td class="sold">{% if r %}{{r.litres_sold}}{% else %}<span>—</span>{% endif %}</td></tr>
+{% endfor %}</table></div>
+<button class="btn">Save 24-hour closing</button>
+</form>
+<div class="summary"><b>Diesel sold: {{diesel_total}} L</b><b>Petrol sold: {{petrol_total}} L</b></div>
+<script>
+document.querySelectorAll('.meter').forEach(x=>x.addEventListener('input',()=> {
+ const sold=x.closest('tr').querySelector('.sold span');
+ sold.textContent=(parseFloat(x.value||0)-parseFloat(x.dataset.opening||0)).toFixed(2)+' L';
+}));
+</script>
+{% endblock %}
