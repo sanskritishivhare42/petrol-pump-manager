@@ -1,11 +1,150 @@
-<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Login</title><link rel="stylesheet" href="{{url_for('static',filename='style.css')}}"></head>
-<body class="login-page"><div class="login-card">
-<h1>⛽ Petrol Pump</h1><p>Management System</p>
-<form method="post">
-<label>Username</label><input name="username" required>
-<label>Password</label><input type="password" name="password" required>
-<button>Login</button>
-</form>
+{% extends "base.html" %}
 
-</div></body></html>
+{% block content %}
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <h1>⛽ Petrol Pump</h1>
+
+        <p class="login-subtitle">Management System</p>
+
+        <form method="POST">
+
+            <label>Username</label>
+            <input
+                type="text"
+                name="username"
+                required
+                autocomplete="username"
+            >
+
+            <label>Password</label>
+
+            <div class="password-container">
+
+                <input
+                    type="password"
+                    id="login-password"
+                    name="password"
+                    required
+                    autocomplete="current-password"
+                >
+
+                <button
+                    type="button"
+                    class="show-password"
+                    onclick="toggleLoginPassword()"
+                >
+                    👁 Show
+                </button>
+
+            </div>
+
+            <button type="submit" class="login-button">
+                Login
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<style>
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 75vh;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 35px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.login-card h1 {
+    margin-bottom: 8px;
+}
+
+.login-subtitle {
+    margin-bottom: 25px;
+    color: #64748b;
+}
+
+.login-card label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.login-card input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.password-container {
+    display: flex;
+    gap: 8px;
+}
+
+.password-container input {
+    flex: 1;
+}
+
+.show-password {
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.login-button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+</style>
+
+
+<script>
+
+function toggleLoginPassword() {
+
+    const password = document.getElementById("login-password");
+    const button = document.querySelector(".show-password");
+
+    if (password.type === "password") {
+
+        password.type = "text";
+        button.innerHTML = "🙈 Hide";
+
+    } else {
+
+        password.type = "password";
+        button.innerHTML = "👁 Show";
+
+    }
+
+}
+
+</script>
+
+{% endblock %}
