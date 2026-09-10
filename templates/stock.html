@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card" style="max-width:600px;margin:40px auto;">
+
+    <h2>Stock Adjustment</h2>
+
+    <p style="color:#64748b;">
+        Admin can manually update the current stock of any fuel tank.
+    </p>
+
+    <form method="POST">
+
+        <label>Tank</label>
+
+        <select name="tank_id" required style="width:100%;margin-bottom:20px;">
+            {% for tank in tanks %}
+            <option value="{{ tank.id }}">
+                {{ tank.name }} — {{ tank.fuel_type }}
+                (Current: {{ "%.2f"|format(tank.current_stock) }} L)
+            </option>
+            {% endfor %}
+        </select>
+
+
+        <label>New Stock Quantity (Litres)</label>
+
+        <input
+            type="number"
+            name="new_stock"
+            min="0"
+            step="0.01"
+            required
+            placeholder="Enter stock in litres"
+            style="width:100%;margin-bottom:20px;"
+        >
+
+
+        <button type="submit">
+            Update Stock
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}
