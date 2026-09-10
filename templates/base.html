@@ -1,41 +1,63 @@
 <!doctype html>
 <html lang="en">
+
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Petrol Pump Manager</title>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 
 <body>
 
 <header>
-  <div class="brand">⛽ Petrol Pump Manager</div>
 
-  {% if session.get('user_id') %}
-  <nav>
-    <a href="{{ url_for('dashboard') }}">Dashboard</a>
-    <a href="{{ url_for('daily') }}">24-Hour Entry</a>
-    <a href="{{ url_for('purchase') }}">Fuel Purchase</a>
-    <a href="{{ url_for('dues') }}">Customer Dues</a>
-    <a href="{{ url_for('corrections') }}">Corrections</a>
+<div class="brand">⛽ Petrol Pump Manager</div>
 
-    {% if session.get('role') == 'ADMIN' %}
-      <a href="{{ url_for('users') }}">Users</a>
-      <a href="{{ url_for('audit') }}">Audit</a>
-    {% endif %}
+{% if session.get('user_id') %}
 
-    <a href="{{ url_for('logout') }}">Logout</a>
-  </nav>
-  {% endif %}
+<nav>
+
+<a href="{{ url_for('dashboard') }}">Dashboard</a>
+
+<a href="{{ url_for('daily') }}">24-Hour Entry</a>
+
+<a href="{{ url_for('purchase') }}">Fuel Purchase</a>
+
+<a href="{{ url_for('dues') }}">Customer Dues</a>
+
+<a href="{{ url_for('corrections') }}">Corrections</a>
+
+<a href="{{ url_for('change_password') }}">Change Password</a>
+
+{% if session.get('role') == 'ADMIN' %}
+
+<a href="{{ url_for('users') }}">Users</a>
+
+<a href="{{ url_for('audit') }}">Audit</a>
+
+{% endif %}
+
+<a href="{{ url_for('logout') }}">Logout</a>
+
+</nav>
+
+{% endif %}
+
 </header>
 
 <main>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
-  {% for category, message in messages %}
-    <div class="flash {{ category }}">{{ message }}</div>
-  {% endfor %}
+
+{% for category, message in messages %}
+
+<div class="flash {{ category }}">{{ message }}</div>
+
+{% endfor %}
+
 {% endwith %}
 
 {% block content %}{% endblock %}
@@ -43,4 +65,5 @@
 </main>
 
 </body>
+
 </html>
