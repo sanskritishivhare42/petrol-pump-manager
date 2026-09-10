@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div style="max-width:1400px;margin:30px auto;">
+
+    <h1>Admin Data</h1>
+
+    <p style="color:#64748b;">
+        Complete database records. Admin access only.
+    </p>
+
+
+    <!-- USERS -->
+
+    <h2>Users</h2>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Active</th>
+            </tr>
+
+            {% for u in users %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.name }}</td>
+                <td>{{ u.username }}</td>
+                <td>{{ u.role }}</td>
+                <td>{{ "Yes" if u.active else "No" }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">No users found.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    <!-- TANKS -->
+
+    <h2>Tank Stock</h2>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Tank</th>
+                <th>Fuel</th>
+                <th>Capacity</th>
+                <th>Current Stock</th>
+            </tr>
+
+            {% for t in tanks %}
+            <tr>
+                <td>{{ t.id }}</td>
+                <td>{{ t.name }}</td>
+                <td>{{ t.fuel_type }}</td>
+                <td>{{ t.capacity }} L</td>
+                <td>{{ t.current_stock }} L</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">No tanks found.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    <!-- MACHINES -->
+
+    <h2>Machines</h2>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Machine</th>
+                <th>Fuel</th>
+                <th>Opening Meter</th>
+                <th>Active</th>
+            </tr>
+
+            {% for m in machines %}
+            <tr>
+                <td>{{ m.id }}</td>
+                <td>{{ m.name }}</td>
+                <td>{{ m.fuel_type }}</td>
+                <td>{{ m.opening_meter }}</td>
+                <td>{{ "Yes" if m.active else "No" }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">No machines found.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    <!-- DAILY READINGS -->
+
+    <h2>Daily Meter Readings</h2>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Machine</th>
+                <th>Opening</th>
+                <th>Closing</th>
+                <th>Litres Sold</th>
+                <th>Entered By</th>
+            </tr>
+
+            {% for r in readings %}
+            <tr>
+                <td>{{ r.id }}</td>
+                <td>{{ r.business_date }}</td>
+                <td>{{ r.machine.name }}</td>
+                <td>{{ r.opening_meter }}</td>
+                <td>{{ r.closing_meter }}</td>
+                <td>{{ r.litres_sold }}</td>
+                <td>{{ r.user.name }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7">No readings found.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    <!-- PURCHASES -->
+
+    <h2>Fuel Purchases</h2>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Tank</th>
+                <th>Quantity</th>
+                <th>Supplier</th>
+                <th>Invoice</th>
+                <th>Tanker</th>
+                <th>Entered By</th>
+            </tr>
+
+            {% for p in purchases %}
+            <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.business_date }}</td>
+                <td>{{ p.tank.name }}</td>
+                <td>{{ p.quantity }} L</td>
+                <td>{{ p.supplier or "-" }}</td>
+                <td>{{ p.invoice_number or "-" }}</td>
+                <td>{{ p.tanker_number or "-" }}</td>
+                <td>{{ p.user.name }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8">No purchases found.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    <!-- CUSTOMER DUES -->
+
+    <h2>Customer Dues</h2>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Mobile</th>
+                <th>Vehicle</th>
+                <th>Fuel</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Paid</th>
+                <th>Remaining</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+
+            {% for d in dues %}
+            <tr>
+                <td>{{ d.id }}</td>
+                <td>{{ d.customer_name }}</td>
+                <td>{{ d.mobile_number or "-" }}</td>
+                <td>{{ d.vehicle_number or "-" }}</td>
+                <td>{{ d.fuel_type }}</td>
+                <td>{{ d.quantity }} L</td>
+                <td>₹{{ "%.2f"|format(d.total_amount) }}</td>
+                <td>₹{{ "%.2f"|format(d.paid_amount) }}</td>
+                <td>₹{{ "%.2f"|format(d.remaining_amount) }}</td>
+                <td>{{ d.status }}</td>
+                <td>{{ d.business_date }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="11">No customer dues found.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    <!-- CORRECTIONS -->
+
+    <h2>Correction Requests</h2>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Reading ID</th>
+                <th>Old Closing</th>
+                <th>New Closing</th>
+                <th>Reason</th>
+                <th>Requested By</th>
+                <th>Approved By</th>
+                <th>Status</th>
+                <th>Created</th>
+            </tr>
+
+            {% for c in corrections %}
+            <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.reading_id }}</td>
+                <td>{{ c.old_closing }}</td>
+                <td>{{ c.new_closing }}</td>
+                <td>{{ c.reason }}</td>
+                <td>{{ c.requester.name }}</td>
+                <td>{{ c.approver.name if c.approver else "-" }}</td>
+                <td>{{ c.status }}</td>
+                <td>{{ c.created_at }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="9">No correction requests found.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    <!-- AUDIT LOGS -->
+
+    <h2>Audit Logs</h2>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Date/Time</th>
+                <th>User</th>
+                <th>Action</th>
+                <th>Details</th>
+            </tr>
+
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.id }}</td>
+                <td>{{ log.created_at }}</td>
+                <td>{{ log.user.name }}</td>
+                <td>{{ log.action }}</td>
+                <td>{{ log.details }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">No audit logs found.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}
