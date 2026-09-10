@@ -317,40 +317,6 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/stock", methods=["GET", "POST"])
-@login_required
-@admin_required
-def stock():
-    if request.method == "POST":
-        try:
-            tank = Tank.query.get_or_404(int(request.form["tank_id"]))
-            new_stock = float(request.form["new_stock"])
-
-            if new_stock < 0 or new_stock > tank.capacity:
-                raise ValueError
-
-            old_stock = tank.current_stock
-            tank.current_stock = new_stock
-            db.session.commit()
-
-            log(
-                "STOCK_ADJUSTED",
-                f"{tank.name}: {old_stock:.2f} L -> {new_stock:.2f} L"
-            )
-
-            flash("Tank stock updated successfully.", "success")
-
-        except:
-            flash("Please enter a valid stock quantity.", "error")
-
-        return redirect(url_for("stock"))
-
-    return render_template(
-        "stock.html",
-        tanks=Tank.query.all()
-    )
-
-
 @app.route("/dashboard")
 @login_required
 def dashboard():
@@ -834,6 +800,33 @@ def users():
     return render_template(
         "users.html",
         users=User.query.all()
+    )
+
+
+@app.route("/admin/data")
+@login_required
+@admin_required
+def admin_data():
+    return render_template(
+        "admin_data.html",
+        users=User.query.order_by(User.id).all(),
+        tanks=Tank.query.order_by(Tank.id).all(),
+        machines=Machine.query.order_by(Machine.id).all(),
+        readings=DailyReading.query.order_by(
+            DailyReading.business_date.desc()
+        ).all(),
+        purchases=Purchase.query.order_by(
+            Purchase.created_at.desc()
+        ).all(),
+        dues=CustomerDue.query.order_by(
+            CustomerDue.created_at.desc()
+        ).all(),
+        corrections=CorrectionRequest.query.order_by(
+            CorrectionRequest.created_at.desc()
+        ).all(),
+        logs=AuditLog.query.order_by(
+            AuditLog.created_at.desc()
+        ).all()
     )
 
 
