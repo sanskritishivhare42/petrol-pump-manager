@@ -7,7 +7,7 @@
     <h2>Stock Adjustment</h2>
 
     <p style="color:#64748b;">
-        Admin can manually update the current stock of any fuel tank.
+        Admin can manually update the current stock of selected fuel tanks.
     </p>
 
     <form method="POST">
@@ -15,14 +15,21 @@
         <label>Tank</label>
 
         <select name="tank_id" required style="width:100%;margin-bottom:20px;">
-            {% for tank in tanks %}
-            <option value="{{ tank.id }}">
-                {{ tank.name }} — {{ tank.fuel_type }}
-                (Current: {{ "%.2f"|format(tank.current_stock) }} L)
-            </option>
-            {% endfor %}
-        </select>
 
+            {% for tank in tanks %}
+
+                {% if tank.name in ["Diesel Tank 1", "Diesel Tank 2", "Petrol Tank 1"] %}
+
+                <option value="{{ tank.id }}">
+                    {{ tank.name }} — {{ tank.fuel_type }}
+                    (Current: {{ "%.2f"|format(tank.current_stock) }} L)
+                </option>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </select>
 
         <label>New Stock Quantity (Litres)</label>
 
@@ -35,7 +42,6 @@
             placeholder="Enter stock in litres"
             style="width:100%;margin-bottom:20px;"
         >
-
 
         <button type="submit">
             Update Stock
